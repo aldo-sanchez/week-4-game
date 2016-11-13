@@ -10,32 +10,35 @@
   </head>
   <body>
     <div class="container">
-      <div class="row" id="characters">
-        <div class="col-md-3" id="char0">
-          <h2>darth vader</h2>
+
+      <!--User Available Selections (characters)-->
+      <div class="row" id="characters"></div>
+
+      <!--User Selection (userCharacter)-->
+      <div class="row">
+        <div class="col-md-3" id="userCharacter">
+          <h2></h2>
         </div>
-        <div class="col-md-3" id="char1">
-          <h2>yoda</h2>
-        </div>
-        <div class="col-md-3" id="char2">
-          <h2>luke</h2>
-        </div>
-        <div class="col-md-3" id="char3">
-          <h2>chewbacca</h2>
+        <div class="col-md-8">
+          <h2>empty</h2>
         </div>
       </div>
+
+      <!--Available enemy selections-->
+      <div class="row" id="enemies"></div>
+      
+      <!--Attack Button-->
       <div class="row">
         <div class="col-md-12">
           <button type="button" class="btn btn-primary btn-block" id="attackButton">Attack</button>
-          
         </div>
       </div>
     </div>
 
     <!--jquery-->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    crossorigin="anonymous"></script> 
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>  
+
     <!--game javascript--> 
     <script type="text/javascript" src="assets/javascript/game.js"></script>
   </body>

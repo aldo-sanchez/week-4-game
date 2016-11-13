@@ -1,12 +1,13 @@
 console.log("star wars!!!")
 
 //define player object:
-var player = {isInitialized:false, isPlaying:false, wins:0, losses:0};
+var player = {isInitialized:false, isAttacking:false, wins:0, losses:0};
 var enemyArray = [];
 var enemyCharacter;
 var userCharacter;
 
 // define a character constructor:
+// name: name of character, isUser:bool defining if this character was selected by user, isOption:  bool defining if character is available as an option for selection (user or enemy), health: character total health, attackBase: base of attack for character that adds to attackPower after every move, attackPower: character power that is used if userCharacter, counterAttack: character power that is used if enemyCharacter
 function character(name, isUser, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
   this.name = name;
   this.isUser = isUser;
@@ -25,22 +26,45 @@ var luke = new character("Luke", false, true, false, 150, 30, 30, 50);
 var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
 
 //collect all character object in a character array so that we can dynamically call a character
-charArray = [darthVader, yoda, luke, chewbacca]
+charArray = [darthVader, yoda, luke, chewbacca];
+
+// display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
+for (let i = 0; i < charArray.length; i++){
+  var characters = $("#characters");
+  characters.append("<div class='col-md-3' id='char" + i + "'></div>");
+  var charDiv = $("#characters #char"+i);
+  charDiv.append("<h2>"+charArray[i].name+"</h2>")
+}
+
+// display available enemies in id:"enemies" and id:"enemy'i'" where i 0 to length of enemyArray.
+function displayEnemies(){
+  for (let i = 0; i < enemyArray.length; i++){
+    var enemy = $("#enemies");
+    enemy.append("<div class='col-md-3' id='enemy" + i + "'></div>");
+    var enemyDiv = $("#enemies #enemy"+i);
+    enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
+  }
+}
 
 //click events for all characters while isInitialized = false.  This is used for character selection (for now)
-for (let i = 0; i <= 3; i++){
-  $("#char" + i).click(function(){
-    if (!player.isInitialized && !player.isPlaying){
+for (let i = 0; i < charArray.length; i++){
+  $("#char" + i).click(function selectCharacter(){
+    if (!player.isInitialized && !player.isAttacking){
   // alert("you clicked " + i);
     userSelection(i);
     }
   });
 };
 
-// character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects.  This array will be used to select a random enemy for battle. 
+function displayUserCharacter(){
+  $("#userCharacter h2").html(userCharacter.name);
+  $("#characters").hide();
+}
+
+// character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
 function userSelection(i){
   player.isInitialized = !player.isInitialized;
-  player.isPlaying = !player.isPlaying;
+  player.isAttacking = !player.isAttacking;
   userCharacter = charArray[i];
   userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
@@ -53,7 +77,7 @@ function userSelection(i){
 
       enemyArray = [charArray[1], charArray[2],charArray[3]];
       // selectEnemy();
-      console.log("darthVader");
+      console.log(charArray[0].name);
       break;
 
     case 1:    
@@ -63,7 +87,7 @@ function userSelection(i){
 
       enemyArray = [charArray[0], charArray[2], charArray[3]];
       // selectEnemy();
-      console.log("yoda");
+      console.log(charArray[1].name);
       break;
 
     case 2:
@@ -73,7 +97,7 @@ function userSelection(i){
 
       enemyArray = [charArray[0], charArray[1], charArray[3]];
       // selectEnemy();
-      console.log("luke");
+      console.log(charArray[2].name);
       break;
 
     case 3:
@@ -83,11 +107,15 @@ function userSelection(i){
 
       enemyArray = [charArray[0], charArray[1], charArray[2]];
       // selectEnemy();
-      console.log("chewbacca");
+      console.log(charArray[3].name);
       break;
   }
-  selectEnemy();
+  displayUserCharacter();
+  displayEnemies();
+  // selectEnemy();
 };
+
+
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
 function selectEnemy(){
@@ -98,7 +126,7 @@ function selectEnemy(){
 
 
 $("#attackButton").click(function(){
-  if(player.isPlaying){
+  if(player.isAttacking){
     if(enemyCharacter.health >= 0){
       console.log("im attacking");
       attackLogic();
@@ -122,7 +150,7 @@ function attackLogic(){
 function checkHealth(){
   if (userCharacter.health <= 0){
     console.log("you lose");
-    player.isPlaying = !player.isPlaying;
+    player.isAttacking = !player.isAttacking;
   }
   else if (enemyCharacter.health <= 0){
     console.log("you win");
