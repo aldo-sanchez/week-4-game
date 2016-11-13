@@ -28,6 +28,10 @@ var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
 //collect all character object in a character array so that we can dynamically call a character
 charArray = [darthVader, yoda, luke, chewbacca];
 
+$(document).ready(function () {
+    displayCharacters();
+});
+
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
 function displayCharacters(){
   var characters = $("#characters");
@@ -39,7 +43,6 @@ function displayCharacters(){
     charDiv.append("<h2>"+charArray[i].name+"</h2>")
   }
 }
-displayCharacters();
 
 // after character is selected display user character and hide all selections
 function displayUserCharacter(){
@@ -87,61 +90,26 @@ for (let i = 0; i < charArray.length; i++){
 
 function enemySelection(selectedEnemy){
   player.isAttacking = !player.isAttacking;
+  enemyCharacter = enemyArray[selectedEnemy];
   console.log(enemyArray[selectedEnemy]);
-  console.log("i selectd an enemy")
 }
 
 // character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
+
 function userSelection(i){
   userCharacter = charArray[i];
   userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
 
-  switch(i){
-    case 0:   
-      charArray[1].isEnemy = !charArray[1].isEnemy;      
-      charArray[2].isEnemy = !charArray[2].isEnemy;
-      charArray[3].isEnemy = !charArray[3].isEnemy;
+  charArray.splice(i,1);
+  enemyArray = charArray;
 
-      enemyArray = [charArray[1], charArray[2],charArray[3]];
-      // selectEnemy();
-      console.log(charArray[0].name);
-      break;
-
-    case 1:    
-      charArray[0].isEnemy = !charArray[0].isEnemy;      
-      charArray[2].isEnemy = !charArray[2].isEnemy;
-      charArray[3].isEnemy = !charArray[3].isEnemy;
-
-      enemyArray = [charArray[0], charArray[2], charArray[3]];
-      // selectEnemy();
-      console.log(charArray[1].name);
-      break;
-
-    case 2:
-      charArray[0].isEnemy = !charArray[0].isEnemy;      
-      charArray[1].isEnemy = !charArray[1].isEnemy;
-      charArray[3].isEnemy = !charArray[3].isEnemy;
-
-      enemyArray = [charArray[0], charArray[1], charArray[3]];
-      // selectEnemy();
-      console.log(charArray[2].name);
-      break;
-
-    case 3:
-      charArray[0].isEnemy = !charArray[0].isEnemy;      
-      charArray[1].isEnemy = !charArray[1].isEnemy;
-      charArray[2].isEnemy = !charArray[2].isEnemy;
-
-      enemyArray = [charArray[0], charArray[1], charArray[2]];
-      // selectEnemy();
-      console.log(charArray[3].name);
-      break;
+  for (i = 0; i < enemyArray.length; i++){
+    enemyArray[i].isEnemy = !enemyArray[i].isEnemy;
   }
   displayUserCharacter();
   displayEnemies();
-  // selectEnemy();
-};
+}
 
 
 
