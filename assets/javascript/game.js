@@ -3,6 +3,8 @@ console.log("star wars!!!")
 //define player object:
 var player = {isPlaying:false, wins:0, losses:0};
 var enemyArray = [];
+var enemyCharacter;
+var userCharacter;
 
 // define a character constructor:
 function character(name, isPlayer, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
@@ -22,10 +24,11 @@ var yoda = new character("Yoda", false, true, false, 100, 35, 35, 30);
 var luke = new character("Luke", false, true, false, 150, 30, 30, 50);
 var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
 
+//collect all character object in a character array so that we can dynamically call a character
 charArray = [darthVader, yoda, luke, chewbacca]
 
-//click events for all characters
-for (let i = 1; i <= 4; i++){
+//click events for all characters while isPlaying = false.  This is used for character selection (for now)
+for (let i = 0; i <= 3; i++){
   $("#char" + i).click(function(){
     if (!player.isPlaying){
   // alert("you clicked " + i);
@@ -34,57 +37,71 @@ for (let i = 1; i <= 4; i++){
   });
 };
 
-// function after initial click
+// character selection function will turn isPlaying = true, then change the selected character's isPlayer = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects.  This array will be used to select a random enemy for battle. 
 function characterSelection(i){
   player.isPlaying = !player.Playing;
-  switch(i){
+  userCharacter = charArray[i];
+  userCharacter.isPlayer = !userCharacter.isPlayer;
+  userCharacter.isOption = !userCharacter.isOption;
 
-    case 1:
-      charArray[0].isPlayer = !charArray[0].isPlayer;
-      charArray[0].isOption = !charArray[0].isOption;
-      
+  switch(i){
+    case 0:   
       charArray[1].isEnemy = !charArray[1].isEnemy;      
       charArray[2].isEnemy = !charArray[2].isEnemy;
       charArray[3].isEnemy = !charArray[3].isEnemy;
 
       enemyArray = [charArray[1], charArray[2],charArray[3]];
+      // selectEnemy();
       console.log("darthVader");
       break;
 
-    case 2:
-      charArray[1].isPlayer = !charArray[1].isPlayer;
-      charArray[1].isOption = !charArray[1].isOption;
-      
+    case 1:    
       charArray[0].isEnemy = !charArray[0].isEnemy;      
       charArray[2].isEnemy = !charArray[2].isEnemy;
       charArray[3].isEnemy = !charArray[3].isEnemy;
 
       enemyArray = [charArray[0], charArray[2], charArray[3]];
+      // selectEnemy();
       console.log("yoda");
       break;
 
-    case 3:
-      charArray[2].isPlayer = !charArray[2].isPlayer;
-      charArray[2].isOption = !charArray[2].isOption;
-      
+    case 2:
       charArray[0].isEnemy = !charArray[0].isEnemy;      
       charArray[1].isEnemy = !charArray[1].isEnemy;
       charArray[3].isEnemy = !charArray[3].isEnemy;
 
       enemyArray = [charArray[0], charArray[1], charArray[3]];
+      // selectEnemy();
       console.log("luke");
       break;
 
-    case 4:
-      charArray[3].isPlayer = !charArray[3].isPlayer;
-      charArray[3].isOption = !charArray[3].isOption;
-      
+    case 3:
       charArray[0].isEnemy = !charArray[0].isEnemy;      
       charArray[1].isEnemy = !charArray[1].isEnemy;
       charArray[2].isEnemy = !charArray[2].isEnemy;
 
       enemyArray = [charArray[0], charArray[1], charArray[2]];
+      // selectEnemy();
       console.log("chewbacca");
       break;
   }
+  selectEnemy();
 };
+
+//selects enemy from enemyArray sets it to enemyCharacter and removes from array.
+function selectEnemy(){
+  var rand = Math.floor(Math.random()*enemyArray.length);
+  enemyCharacter = enemyArray[rand];
+  enemyArray.splice(rand,1);
+}
+
+
+$("#attackButton").click(function(){
+  if(player.isPlaying){
+    console.log("im attacking");
+  };
+});
+
+// function gameLogic(){
+//   while ()
+// }
