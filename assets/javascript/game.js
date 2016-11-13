@@ -29,47 +29,70 @@ var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
 charArray = [darthVader, yoda, luke, chewbacca];
 
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
-for (let i = 0; i < charArray.length; i++){
+function displayCharacters(){
   var characters = $("#characters");
-  characters.append("<div class='col-md-3' id='char" + i + "'></div>");
-  var charDiv = $("#characters #char"+i);
-  charDiv.append("<h2>"+charArray[i].name+"</h2>")
+  characters.append("<div class='col-md-2' id='charactersTitle'></div>");
+  $("#characters #charactersTitle").append("<h2>Characters:</h2>")
+  for (let i = 0; i < charArray.length; i++){
+    characters.append("<div class='col-md-2' id='char" + i + "'></div>");
+    var charDiv = $("#characters #char"+i);
+    charDiv.append("<h2>"+charArray[i].name+"</h2>")
+  }
 }
+displayCharacters();
 
+// after character is selected display user character and hide all selections
 function displayUserCharacter(){
   var userCharDiv = $("#userSelection");
+  userCharDiv.append("<div class='col-md-3' id='userCharacterTitle'></div>");
+  $("#userSelection #userCharacterTitle").append("<h2>User Character:</h2>");
   userCharDiv.append("<div class='col-md-3' id='userCharacter'></div>");
   var userCharDiv = $("#userSelection #userCharacter");
-  userCharDiv.append("<h2>User Character: "+userCharacter.name+"</h2>");
+  userCharDiv.append("<h2>"+userCharacter.name+"</h2>");
   $("#characters").hide();
 }
 
 // display available enemies in id:"enemies" and id:"enemy'i'" where i 0 to length of enemyArray.
 function displayEnemies(){
+  var enemy = $("#enemies");
+  enemy.append("<div class='col-md-3' id='enemyTitle'></div>");
+  $("#enemies #enemyTitle").append("<h2>Enemies:</h2>");
   for (let i = 0; i < enemyArray.length; i++){
-    var enemy = $("#enemies");
-    enemy.append("<div class='col-md-3' id='enemy" + i + "'></div>");
+    enemy.append("<div class='col-md-3 enemyTest' id='enemy" + i + "'></div>");
     var enemyDiv = $("#enemies #enemy"+i);
     enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
   }
 }
 
-//click events for all characters while isInitialized = false.  This is used for character selection (for now)
+//click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
 for (let i = 0; i < charArray.length; i++){
-  $("#char" + i).click(function selectCharacter(){
+  $(document).on("click","#char"+i,function selectCharacter(){
+  // $("#char" + i).click(function selectCharacter(){
     if (!player.isInitialized && !player.isAttacking){
-  // alert("you clicked " + i);
+    console.log("i selected character");
     userSelection(i);
+    player.isInitialized = !player.isInitialized;
     }
   });
 };
 
+//click event for enemies after enemies are displayed and populated from userSelection().  for some reason I cannot use the for loop if i call displayEnemies(), from inside a function... However this works great!  
+  $(document).on("click",".enemyTest",function selectEnemy(){
+    if (player.isInitialized && !player.isAttacking){
+      var selectedEnemy = $(this).attr("id");
+      selectedEnemy = selectedEnemy.charAt(5);
+      enemySelection(selectedEnemy);
+    }
+  });
 
+function enemySelection(selectedEnemy){
+  player.isAttacking = !player.isAttacking;
+  console.log(enemyArray[selectedEnemy]);
+  console.log("i selectd an enemy")
+}
 
 // character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
 function userSelection(i){
-  player.isInitialized = !player.isInitialized;
-  player.isAttacking = !player.isAttacking;
   userCharacter = charArray[i];
   userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
@@ -123,11 +146,11 @@ function userSelection(i){
 
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
-function selectEnemy(){
-  var rand = Math.floor(Math.random()*enemyArray.length);
-  enemyCharacter = enemyArray[rand];
-  enemyArray.splice(rand,1);
-}
+// function selectEnemy(){
+//   var rand = Math.floor(Math.random()*enemyArray.length);
+//   enemyCharacter = enemyArray[rand];
+//   enemyArray.splice(rand,1);
+// }
 
 
 $("#attackButton").click(function(){
@@ -160,7 +183,7 @@ function checkHealth(){
   else if (enemyCharacter.health <= 0){
     console.log("you win");
     // player.isPlaying = !player.isPlaying;
-    selectEnemy();
+    // selectEnemy();
   }
 }
 
