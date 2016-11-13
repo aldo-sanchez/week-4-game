@@ -36,6 +36,14 @@ for (let i = 0; i < charArray.length; i++){
   charDiv.append("<h2>"+charArray[i].name+"</h2>")
 }
 
+function displayUserCharacter(){
+  var userCharDiv = $("#userSelection");
+  userCharDiv.append("<div class='col-md-3' id='userCharacter'></div>");
+  var userCharDiv = $("#userSelection #userCharacter");
+  userCharDiv.append("<h2>User Character: "+userCharacter.name+"</h2>");
+  $("#characters").hide();
+}
+
 // display available enemies in id:"enemies" and id:"enemy'i'" where i 0 to length of enemyArray.
 function displayEnemies(){
   for (let i = 0; i < enemyArray.length; i++){
@@ -56,10 +64,7 @@ for (let i = 0; i < charArray.length; i++){
   });
 };
 
-function displayUserCharacter(){
-  $("#userCharacter h2").html(userCharacter.name);
-  $("#characters").hide();
-}
+
 
 // character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
 function userSelection(i){
