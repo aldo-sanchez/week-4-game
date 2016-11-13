@@ -1,15 +1,15 @@
 console.log("star wars!!!")
 
 //define player object:
-var player = {isPlaying:false, wins:0, losses:0};
+var player = {isInitialized:false, isPlaying:false, wins:0, losses:0};
 var enemyArray = [];
 var enemyCharacter;
 var userCharacter;
 
 // define a character constructor:
-function character(name, isPlayer, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
+function character(name, isUser, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
   this.name = name;
-  this.isPlayer = isPlayer;
+  this.isUser = isUser;
   this.isOption = isOption;
   this.isEnemy = isEnemy;
   this.health = health;
@@ -27,21 +27,22 @@ var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
 //collect all character object in a character array so that we can dynamically call a character
 charArray = [darthVader, yoda, luke, chewbacca]
 
-//click events for all characters while isPlaying = false.  This is used for character selection (for now)
+//click events for all characters while isInitialized = false.  This is used for character selection (for now)
 for (let i = 0; i <= 3; i++){
   $("#char" + i).click(function(){
-    if (!player.isPlaying){
+    if (!player.isInitialized && !player.isPlaying){
   // alert("you clicked " + i);
-    characterSelection(i);
+    userSelection(i);
     }
   });
 };
 
-// character selection function will turn isPlaying = true, then change the selected character's isPlayer = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects.  This array will be used to select a random enemy for battle. 
-function characterSelection(i){
-  player.isPlaying = !player.Playing;
+// character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects.  This array will be used to select a random enemy for battle. 
+function userSelection(i){
+  player.isInitialized = !player.isInitialized;
+  player.isPlaying = !player.isPlaying;
   userCharacter = charArray[i];
-  userCharacter.isPlayer = !userCharacter.isPlayer;
+  userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
 
   switch(i){
@@ -98,10 +99,36 @@ function selectEnemy(){
 
 $("#attackButton").click(function(){
   if(player.isPlaying){
-    console.log("im attacking");
+    if(enemyCharacter.health >= 0){
+      console.log("im attacking");
+      attackLogic();
+    }
   };
 });
 
-// function gameLogic(){
-//   while ()
-// }
+
+function attackLogic(){
+  console.log("user attack power: " + userCharacter.attackPower);
+  console.log("enemy counter attack power: " + enemyCharacter.counterAttack);
+  enemyCharacter.health -= userCharacter.attackPower;
+  userCharacter.health -= enemyCharacter.counterAttack;
+  userCharacter.attackPower += userCharacter.attackBase;
+  console.log("user health: " + userCharacter.health);
+  console.log("enemy health: " + enemyCharacter.health);
+  checkHealth();
+
+  }
+
+function checkHealth(){
+  if (userCharacter.health <= 0){
+    console.log("you lose");
+    player.isPlaying = !player.isPlaying;
+  }
+  else if (enemyCharacter.health <= 0){
+    console.log("you win");
+    // player.isPlaying = !player.isPlaying;
+    selectEnemy();
+  }
+}
+
+// works with randomly selecting an enemy.  need to select the enemy on my own...
