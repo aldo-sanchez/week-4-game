@@ -5,6 +5,7 @@ var player = {isInitialized:false, isAttacking:false, wins:0, losses:0};
 var enemyArray = [];
 var enemyCharacter;
 var userCharacter;
+// var selectedEnemy;
 
 // define a character constructor:
 // name: name of character, isUser:bool defining if this character was selected by user, isOption:  bool defining if character is available as an option for selection (user or enemy), health: character total health, attackBase: base of attack for character that adds to attackPower after every move, attackPower: character power that is used if userCharacter, counterAttack: character power that is used if enemyCharacter
@@ -90,21 +91,11 @@ for (let i = 0; i < charArray.length; i++){
   $(document).on("click",".enemy",function selectEnemy(){
     if (player.isInitialized && !player.isAttacking){
       var selectedEnemy = $(this).attr("id");
-      selectedEnemy = selectedEnemy.charAt(5);
+      selectedEnemy = parseInt(selectedEnemy.charAt(5));
+      console.log("enemyArray index: "+ selectedEnemy);
       enemySelection(selectedEnemy);
     }
   });
-
-function enemySelection(selectedEnemy){
-  player.isAttacking = !player.isAttacking;
-  enemyCharacter = enemyArray[selectedEnemy];
-  enemyArray.splice(enemySelection,1);
-  $("div").remove(".enemy");
-  $("div").remove("#enemyTitle");
-  displayEnemyCharacter();
-  displayEnemies();
-  console.log(enemyArray[selectedEnemy]);
-}
 
 // character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
 
@@ -119,8 +110,23 @@ function userSelection(i){
   for (i = 0; i < enemyArray.length; i++){
     enemyArray[i].isEnemy = !enemyArray[i].isEnemy;
   }
+  console.log("original enemy array "+enemyArray[0].name,enemyArray[1].name,enemyArray[2].name)
   displayUserCharacter();
   displayEnemies();
+}
+
+function enemySelection(i){
+  player.isAttacking = !player.isAttacking;
+  enemyCharacter = enemyArray[i];
+  enemyCharacter.isOption = !enemyCharacter.isOption;
+  
+  enemyArray.splice(i,1);
+  console.log(enemyArray);
+  $("div").remove(".enemy");
+  $("div").remove("#enemyTitle");
+  displayEnemyCharacter();
+  displayEnemies();
+  
 }
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
@@ -157,6 +163,10 @@ function checkHealth(){
   }
   else if (enemyCharacter.health <= 0){
     console.log("you win");
+
+    $("div").remove("#enemyCharacter");
+    $("div").remove("#enemyCharacterTitle");
+    player.isAttacking = !player.isAttacking;
     // player.isPlaying = !player.isPlaying;
     // selectEnemy();
   }
