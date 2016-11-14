@@ -75,6 +75,14 @@ function displayEnemyCharacter(){
   enemyCharDiv.append("<div class='col-md-3' id='enemyCharacter'></div>");
   $("#enemySelection #enemyCharacter").append("<h2>"+enemyCharacter.name+"</h2>"); 
 }
+
+function displayUserHealth(){
+  $("#userHealthContainer").append("<div class='col-md-2' id='userHealthTitle'></div>");
+  $("#userHealthContainer #userHealthTitle").append("<h2>User Health:</h2>");
+  $("#userHealthContainer").append("<div class='col-md-2 id='userHealth'></div>");
+  $("#userHealthContainer #userHealth").append("<h2>"+userCharacter.health+"</h2>");
+}
+
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
 for (let i = 0; i < charArray.length; i++){
   $(document).on("click","#char"+i,function selectCharacter(){
@@ -126,7 +134,6 @@ function enemySelection(i){
   $("div").remove("#enemyTitle");
   displayEnemyCharacter();
   displayEnemies();
-  
 }
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
@@ -141,6 +148,7 @@ $("#attackButton").click(function(){
     if(enemyCharacter.health >= 0){
       console.log("im attacking");
       attackLogic();
+      // displayUserHealth();
     }
   };
 });
