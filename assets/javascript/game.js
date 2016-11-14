@@ -76,11 +76,26 @@ function displayEnemyCharacter(){
   $("#enemySelection #enemyCharacter").append("<h2>"+enemyCharacter.name+"</h2>"); 
 }
 
-function displayUserHealth(){
-  $("#userHealthContainer").append("<div class='col-md-2' id='userHealthTitle'></div>");
-  $("#userHealthContainer #userHealthTitle").append("<h2>User Health:</h2>");
-  $("#userHealthContainer").append("<div class='col-md-2 id='userHealth'></div>");
-  $("#userHealthContainer #userHealth").append("<h2>"+userCharacter.health+"</h2>");
+function displayUserStatus(){
+  $("#userStatus").append("<div class='col-md-3' id='userStatusTitle'></div>");
+  $("#userStatus #userStatusTitle").append("<h2>User Status:</h2>");
+
+  $("#userStatus").append("<div class='col-md-3' id='userHealth'></div>");
+  $("#userStatus #userHealth").append("<h2>User Health: "+userCharacter.health+"</h2>");
+
+  $("#userStatus").append("<div class='col-md-3' id='userAttack'></div>");
+  $("#userStatus #userAttack").append("<h2>User Attack: "+userCharacter.attackPower+"</h2>");
+}
+
+function displayEnemyStatus(){
+  $("#enemyStatus").append("<div class='col-md-3' id='enemyStatusTitle'></div>");
+  $("#enemyStatus #enemyStatusTitle").append("<h2>Enemy Status:</h2>");
+
+  $("#enemyStatus").append("<div class='col-md-3' id='enemyHealth'></div>");
+  $("#enemyStatus #enemyHealth").append("<h2>Enemy Health: "+enemyCharacter.health+"</h2>");
+
+  $("#enemyStatus").append("<div class='col-md-3' id='enemyCounterAttack'></div>");
+  $("#enemyStatus #enemyCounterAttack").append("<h2>Enemy Attack: "+enemyCharacter.counterAttack+"</h2>");
 }
 
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
@@ -121,6 +136,7 @@ function userSelection(i){
   console.log("original enemy array "+enemyArray[0].name,enemyArray[1].name,enemyArray[2].name)
   displayUserCharacter();
   displayEnemies();
+  displayUserStatus();
 }
 
 function enemySelection(i){
@@ -132,8 +148,13 @@ function enemySelection(i){
   console.log(enemyArray);
   $("div").remove(".enemy");
   $("div").remove("#enemyTitle");
+
+  $("div").remove("#enemyStatusTitle");
+  $("div").remove("#enemyHealth");
+  $("div").remove("#enemyCounterAttack");
   displayEnemyCharacter();
   displayEnemies();
+  displayEnemyStatus();
 }
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
@@ -148,7 +169,17 @@ $("#attackButton").click(function(){
     if(enemyCharacter.health >= 0){
       console.log("im attacking");
       attackLogic();
-      // displayUserHealth();
+        
+      $("div").remove("#userStatusTitle");
+      $("div").remove("#userHealth");
+      $("div").remove("#userAttack");
+
+      $("div").remove("#enemyStatusTitle");
+      $("div").remove("#enemyHealth");
+      $("div").remove("#enemyCounterAttack");
+
+      displayUserStatus();
+      displayEnemyStatus();
     }
   };
 });
@@ -175,7 +206,7 @@ function checkHealth(){
     $("div").remove("#enemyCharacter");
     $("div").remove("#enemyCharacterTitle");
     player.isAttacking = !player.isAttacking;
-    // player.isPlaying = !player.isPlaying;
-    // selectEnemy();
   }
 }
+
+// update attack logic to first check health after one attack then after counter attack, then attack then counter... instead of after both
