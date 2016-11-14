@@ -50,8 +50,8 @@ function displayUserCharacter(){
   userCharDiv.append("<div class='col-md-3' id='userCharacterTitle'></div>");
   $("#userSelection #userCharacterTitle").append("<h2>User Character:</h2>");
   userCharDiv.append("<div class='col-md-3' id='userCharacter'></div>");
-  var userCharDiv = $("#userSelection #userCharacter");
-  userCharDiv.append("<h2>"+userCharacter.name+"</h2>");
+  
+  $("#userSelection #userCharacter").append("<h2>"+userCharacter.name+"</h2>");
   $("#characters").hide();
 }
 
@@ -61,12 +61,19 @@ function displayEnemies(){
   enemy.append("<div class='col-md-3' id='enemyTitle'></div>");
   $("#enemies #enemyTitle").append("<h2>Enemies:</h2>");
   for (let i = 0; i < enemyArray.length; i++){
-    enemy.append("<div class='col-md-3 enemyTest' id='enemy" + i + "'></div>");
+    enemy.append("<div class='col-md-3 enemy' id='enemy" + i + "'></div>");
     var enemyDiv = $("#enemies #enemy"+i);
     enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
   }
 }
 
+function displayEnemyCharacter(){
+  var enemyCharDiv = $("#enemySelection");
+  enemyCharDiv.append("<div class='col-md-3' id='enemyCharacterTitle'></div>");
+  $("#enemySelection #enemyCharacterTitle").append("<h2>Enemy Character:</h2>");
+  enemyCharDiv.append("<div class='col-md-3' id='enemyCharacter'></div>");
+  $("#enemySelection #enemyCharacter").append("<h2>"+enemyCharacter.name+"</h2>"); 
+}
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
 for (let i = 0; i < charArray.length; i++){
   $(document).on("click","#char"+i,function selectCharacter(){
@@ -80,7 +87,7 @@ for (let i = 0; i < charArray.length; i++){
 };
 
 //click event for enemies after enemies are displayed and populated from userSelection().  for some reason I cannot use the for loop if i call displayEnemies(), from inside a function... However this works great!  
-  $(document).on("click",".enemyTest",function selectEnemy(){
+  $(document).on("click",".enemy",function selectEnemy(){
     if (player.isInitialized && !player.isAttacking){
       var selectedEnemy = $(this).attr("id");
       selectedEnemy = selectedEnemy.charAt(5);
@@ -91,6 +98,11 @@ for (let i = 0; i < charArray.length; i++){
 function enemySelection(selectedEnemy){
   player.isAttacking = !player.isAttacking;
   enemyCharacter = enemyArray[selectedEnemy];
+  enemyArray.splice(enemySelection,1);
+  $("div").remove(".enemy");
+  $("div").remove("#enemyTitle");
+  displayEnemyCharacter();
+  displayEnemies();
   console.log(enemyArray[selectedEnemy]);
 }
 
@@ -111,15 +123,12 @@ function userSelection(i){
   displayEnemies();
 }
 
-
-
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
 // function selectEnemy(){
 //   var rand = Math.floor(Math.random()*enemyArray.length);
 //   enemyCharacter = enemyArray[rand];
 //   enemyArray.splice(rand,1);
 // }
-
 
 $("#attackButton").click(function(){
   if(player.isAttacking){
@@ -130,7 +139,6 @@ $("#attackButton").click(function(){
   };
 });
 
-
 function attackLogic(){
   console.log("user attack power: " + userCharacter.attackPower);
   console.log("enemy counter attack power: " + enemyCharacter.counterAttack);
@@ -140,7 +148,6 @@ function attackLogic(){
   console.log("user health: " + userCharacter.health);
   console.log("enemy health: " + enemyCharacter.health);
   checkHealth();
-
   }
 
 function checkHealth(){
@@ -154,5 +161,3 @@ function checkHealth(){
     // selectEnemy();
   }
 }
-
-// works with randomly selecting an enemy.  need to select the enemy on my own...
