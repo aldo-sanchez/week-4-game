@@ -9,8 +9,9 @@ var userCharacter;
 
 // define a character constructor:
 // name: name of character, isUser:bool defining if this character was selected by user, isOption:  bool defining if character is available as an option for selection (user or enemy), health: character total health, attackBase: base of attack for character that adds to attackPower after every move, attackPower: character power that is used if userCharacter, counterAttack: character power that is used if enemyCharacter
-function character(name, isUser, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
+function character(name, image, isUser, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
   this.name = name;
+  this.image = image;
   this.isUser = isUser;
   this.isOption = isOption;
   this.isEnemy = isEnemy;
@@ -21,13 +22,13 @@ function character(name, isUser, isOption, isEnemy, health, attackBase,attackPow
 };
 
 // define all characters based on character constructor:
-var darthVader = new character("Darth Vader", false, true, false, 200, 30, 30, 45);
-var yoda = new character("Yoda", false, true, false, 100, 35, 35, 30);
-var luke = new character("Luke", false, true, false, 150, 30, 30, 50);
-var chewbacca = new character("Chewbacca", false, true, false, 250, 25, 25, 30);
+var darthVader = new character("Darth Vader", "assets/images/darth-vader.svg", false, true, false, 200, 30, 30, 45);
+var bobaFett = new character("Boba Fett", "assets/images/boba-fett.svg", false, true, false, 100, 35, 35, 30);
+var leia = new character("Leia", "assets/images/princess-leia.svg", false, true, false, 150, 30, 30, 50);
+var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg", false, true, false, 250, 25, 25, 30);
 
 //collect all character object in a character array so that we can dynamically call a character
-charArray = [darthVader, yoda, luke, chewbacca];
+charArray = [darthVader, bobaFett, leia, chewbacca];
 
 $(document).ready(function () {
     displayCharacters();
@@ -35,33 +36,73 @@ $(document).ready(function () {
 
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
 function displayCharacters(){
-  var characters = $("#characters");
-  characters.append("<div class='col-md-2' id='charactersTitle'></div>");
-  $("#characters #charactersTitle").append("<h2>Characters:</h2>")
-  for (let i = 0; i < charArray.length; i++){
-    characters.append("<div class='col-md-2' id='char" + i + "'></div>");
-    var charDiv = $("#characters #char"+i);
-    charDiv.append("<h2>"+charArray[i].name+"</h2>")
+  var selectCharacter = $("#selectCharacter");
+  for (i = 0; i < charArray.length; i++){
+    var newRowDiv = $("<div></div>").addClass("row");
+    newRowDiv.attr("id", "availableCharacterRow" + i);
+    newRowDiv.appendTo(selectCharacter);
+
+    var newColDiv = $("<div></div>").addClass("col-md-6");
+    newColDiv.attr("id","char" + i);
+    newColDiv.appendTo(newRowDiv);
+
+    var newImage = $("<img>");
+    newImage.attr("src", charArray[i].image);
+    newImage.appendTo(newColDiv);
   }
 }
 
+
+// function displayCharacters(){
+//   var characters = $("#characters");
+//   characters.append("<div class='jumbotron'><h1>Select a Character to Begin!</h1></div>")
+//   for (i = 0; i < charArray.length; i++){
+    
+//     characters.append("<div class='row' id='char" + i + "Row'></div>");
+//     var charactersRow = $("#char" + i + "Row");
+//     charactersRow.append("<div class='col-md-6 characters' id='char" + i + "'></div>");
+//     var charactersColumn = $("#char" + i);
+//     charactersColumn.append("<img src=" + charArray[i].image + ">");
+//     charactersColumn.append("<h2>" + charArray[i].name + "</h2>");
+//   }
+// }
+
+// function displayCharacters(){
+//   var characters = $("#characters");
+//   characters.append("<div class='col-md-2' id='charactersTitle'></div>");
+//   $("#characters #charactersTitle").append("<h2>Characters:</h2>")
+//   for (i = 0; i < charArray.length; i++){
+//     characters.append("<div class='col-md-2' id='char" + i + "'></div>");
+//     var charDiv = $("#characters #char"+i);
+//     charDiv.append("<img src="+charArray[i].image+">");
+//     // charDiv.append("<h2>"+charArray[i].name+"</h2>");
+//   }
+// }
+
 // after character is selected display user character and hide all selections
+
 function displayUserCharacter(){
-  var userCharDiv = $("#userSelection");
-  userCharDiv.append("<div class='col-md-3' id='userCharacterTitle'></div>");
-  $("#userSelection #userCharacterTitle").append("<h2>User Character:</h2>");
-  userCharDiv.append("<div class='col-md-3' id='userCharacter'></div>");
-  
-  $("#userSelection #userCharacter").append("<h2>"+userCharacter.name+"</h2>");
-  $("#characters").hide();
+  var selectCharacter = $("#selectCharacter");
+  $(selectCharacter).hide();
+
 }
+
+// function displayUserCharacter(){
+//   var userCharDiv = $("#userSelection");
+//   userCharDiv.append("<div class='col-md-3' id='userCharacterTitle'></div>");
+//   $("#userSelection #userCharacterTitle").append("<h2>User Character:</h2>");
+//   userCharDiv.append("<div class='col-md-3' id='userCharacter'></div>");
+  
+//   $("#userSelection #userCharacter").append("<h2>"+userCharacter.name+"</h2>");
+//   $("#characters").hide();
+// }
 
 // display available enemies in id:"enemies" and id:"enemy'i'" where i 0 to length of enemyArray.
 function displayEnemies(){
   var enemy = $("#enemies");
   enemy.append("<div class='col-md-3' id='enemyTitle'></div>");
   $("#enemies #enemyTitle").append("<h2>Enemies:</h2>");
-  for (let i = 0; i < enemyArray.length; i++){
+  for (i = 0; i < enemyArray.length; i++){
     enemy.append("<div class='col-md-3 enemy' id='enemy" + i + "'></div>");
     var enemyDiv = $("#enemies #enemy"+i);
     enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
