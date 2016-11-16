@@ -31,33 +31,61 @@ var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg", false,
 charArray = [darthVader, bobaFett, leia, chewbacca];
 
 $(document).ready(function () {
-    displayCharacters();
+    displayCharacters("user", charArray);
 });
 
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
-function displayCharacters(){
-  var userColumn = $("#userColumn");
-  var userRow = $("<div></div>").addClass("row");
-  userRow.attr("id", "userRow");
-  userRow.appendTo(userColumn);
+// function displayCharacters(){
+//   var userColumn = $("#userColumn");
+//   var userRow = $("<div></div>").addClass("row");
+//   userRow.attr("id", "userRow");
+//   userRow.appendTo(userColumn);
   
-  var selectCharacter = $("<div></div>").addClass("col-md-12");
-  selectCharacter.attr("id", "selectCharacter");
-  selectCharacter.appendTo(userRow);
-  for (i = 0; i < charArray.length; i++){
-    var newRowDiv = $("<div></div>").addClass("row");
-    newRowDiv.attr("id", "availableCharacterRow" + i);
-    newRowDiv.appendTo(selectCharacter);
+//   var selectCharacter = $("<div></div>").addClass("col-md-12");
+//   selectCharacter.attr("id", "selectCharacter");
+//   selectCharacter.appendTo(userRow);
+//   for (i = 0; i < charArray.length; i++){
+//     var newRowDiv = $("<div></div>").addClass("row");
+//     newRowDiv.attr("id", "availableCharacterRow" + i);
+//     newRowDiv.appendTo(selectCharacter);
 
-    var newColDiv = $("<div></div>").addClass("col-md-12");
-    newColDiv.attr("id","char" + i);
+//     var newColDiv = $("<div></div>").addClass("col-md-12");
+//     newColDiv.attr("id","char" + i);
+//     newColDiv.appendTo(newRowDiv);
+
+//     var newImage = $("<img>");
+//     newImage.attr("src", charArray[i].image);
+//     newImage.appendTo(newColDiv);
+
+//     var characterTitle = $("<h2>" + charArray[i].name + "</h2>");
+//     characterTitle.appendTo(newColDiv);
+//   }
+// }
+
+function displayCharacters(character, array){
+  var column = $("#" + character + "Column");
+  var row = $("<div></div>").addClass("row");
+  row.attr("id", character + "Row");
+  row.appendTo(column);
+
+  var select = $("<div></div>").addClass("col-md-12");
+  select.attr("id", "select" + character);
+  select.appendTo(row);
+
+  for (i = 0; i < array.length; i++){
+    var newRowDiv = $("<div></div>").addClass("row");
+    newRowDiv.attr("id", "available" + character + "Row" + i);
+    newRowDiv.appendTo(select);
+
+    var newColDiv = $("<div></div>").addClass("col-md-12 " + character);
+    newColDiv.attr("id", character + i);
     newColDiv.appendTo(newRowDiv);
 
     var newImage = $("<img>");
-    newImage.attr("src", charArray[i].image);
+    newImage.attr("src", array[i].image);
     newImage.appendTo(newColDiv);
 
-    var characterTitle = $("<h2>" + charArray[i].name + "</h2>");
+    var characterTitle = $("<h2>" + array[i].name + "</h2>");
     characterTitle.appendTo(newColDiv);
   }
 }
@@ -92,12 +120,12 @@ function displayCharacters(){
 // after character is selected display user character and hide all selections
 
 function displayUserCharacter(){
-  var selectCharacter = $("#selectCharacter");
+  var selectCharacter = $("#selectuser");
   $(selectCharacter).remove();
 
   var userCharacterDiv = $("<div></div>").addClass("col-md-12");
   userCharacterDiv.attr("id", "userCharacter");
-  userCharacterDiv.appendTo(userRow);
+  userCharacterDiv.appendTo("#userRow" );
 
   var userCharacterImage = $("<img>");
   userCharacterImage.attr("src", userCharacter.image);
@@ -119,16 +147,67 @@ function displayUserCharacter(){
 // }
 
 // display available enemies in id:"enemies" and id:"enemy'i'" where i 0 to length of enemyArray.
+
 function displayEnemies(){
-  var enemy = $("#enemies");
-  enemy.append("<div class='col-md-3' id='enemyTitle'></div>");
-  $("#enemies #enemyTitle").append("<h2>Enemies:</h2>");
+  var enemyColumn = $("#enemyColumn");
+  var enemyRow = $("<div></div>").addClass("row");
+  enemyRow.attr("id", "enemyRow");
+  enemyRow.appendTo(enemyColumn);
+
+  var selectEnemy = $("<div></div>").addClass("col-md-12");
+  selectEnemy.attr("id", "selectEnemy");
+  selectEnemy.appendTo(enemyRow);
+
   for (i = 0; i < enemyArray.length; i++){
-    enemy.append("<div class='col-md-3 enemy' id='enemy" + i + "'></div>");
-    var enemyDiv = $("#enemies #enemy"+i);
-    enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
+    var newRowDiv = $("<div></div>").addClass("row");
+    newRowDiv.attr("id", "availableEnemyrow" + i);
+    newRowDiv.appendTo(selectEnemy);
+
+    var newColDiv = $("<div></div>").addClass("col-md-12 enemy");
+    newColDiv.attr("id","enemy" + i);
+    newColDiv.appendTo(newRowDiv);
+
+    var newImage = $("<img>");
+    newImage.attr("src", enemyArray[i].image);
+    newImage.appendTo(newColDiv);
+
   }
 }
+// function displayEnemies(){
+
+//   var userColumn = $("#userColumn");
+//   var userRow = $("<div></div>").addClass("row");
+//   userRow.attr("id", "userRow");
+//   userRow.appendTo(userColumn);
+  
+//   var selectCharacter = $("<div></div>").addClass("col-md-12");
+//   selectCharacter.attr("id", "selectCharacter");
+//   selectCharacter.appendTo(userRow);
+//   for (i = 0; i < charArray.length; i++){
+//     var newRowDiv = $("<div></div>").addClass("row");
+//     newRowDiv.attr("id", "availableCharacterRow" + i);
+//     newRowDiv.appendTo(selectCharacter);
+
+//     var newColDiv = $("<div></div>").addClass("col-md-12");
+//     newColDiv.attr("id","char" + i);
+//     newColDiv.appendTo(newRowDiv);
+
+//     var newImage = $("<img>");
+//     newImage.attr("src", charArray[i].image);
+//     newImage.appendTo(newColDiv);
+
+//     var characterTitle = $("<h2>" + charArray[i].name + "</h2>");
+//     characterTitle.appendTo(newColDiv);
+
+//   var enemy = $("#enemies");
+//   enemy.append("<div class='col-md-3' id='enemyTitle'></div>");
+//   $("#enemies #enemyTitle").append("<h2>Enemies:</h2>");
+//   for (i = 0; i < enemyArray.length; i++){
+//     enemy.append("<div class='col-md-3 enemy' id='enemy" + i + "'></div>");
+//     var enemyDiv = $("#enemies #enemy"+i);
+//     enemyDiv.append("<h2>"+enemyArray[i].name+"</h2>")
+//   }
+// }
 
 function displayEnemyCharacter(){
   var enemyCharDiv = $("#enemySelection");
@@ -183,7 +262,7 @@ function displayEnemyStatus(){
 
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
 for (let i = 0; i < charArray.length; i++){
-  $(document).on("click","#char"+i,function selectCharacter(){
+  $(document).on("click","#user"+i,function selectCharacter(){
   // $("#char" + i).click(function selectCharacter(){
     if (!player.isInitialized && !player.isAttacking){
     console.log("i selected character");
@@ -218,7 +297,8 @@ function userSelection(i){
   }
   console.log("original enemy array "+enemyArray[0].name,enemyArray[1].name,enemyArray[2].name)
   displayUserCharacter();
-  displayEnemies();
+  // displayEnemies();
+  displayCharacters("enemy", enemyArray);
   displayUserStatus();
 }
 
