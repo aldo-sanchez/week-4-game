@@ -138,16 +138,37 @@ function displayEnemyCharacter(){
   $("#enemySelection #enemyCharacter").append("<h2>"+enemyCharacter.name+"</h2>"); 
 }
 
-function displayUserStatus(){
-  $("#userStatus").append("<div class='col-md-3' id='userStatusTitle'></div>");
-  $("#userStatus #userStatusTitle").append("<h2>User Status:</h2>");
+function  displayUserStatus(){
+  var userStatusCol = $("<div></div>").addClass("col-md-12"); 
+  userStatusCol.attr("id", "userStatusCol");
+  userStatusCol.appendTo(userRow);
 
-  $("#userStatus").append("<div class='col-md-3' id='userHealth'></div>");
-  $("#userStatus #userHealth").append("<h2>User Health: "+userCharacter.health+"</h2>");
+  var userStatusRow = $("<div></div>").addClass("row");
+  userStatusRow.attr("id", "userStatusRow");
+  userStatusRow.appendTo(userStatusCol);
 
-  $("#userStatus").append("<div class='col-md-3' id='userAttack'></div>");
-  $("#userStatus #userAttack").append("<h2>User Attack: "+userCharacter.attackPower+"</h2>");
+  var userHealth = $("<div></div>").addClass("col-md-12");
+  userHealth.attr("id", "userHealth");
+  userHealth.appendTo(userStatusRow);
+  var userHealthTitle = $("<h2>Health:" + userCharacter.health + "</h2>");
+  userHealthTitle.appendTo(userHealth);
+
+  var userAttackPower = $("<div></div>").addClass("col-md-12");
+  userAttackPower.attr("id", "userAttackPower");
+  userAttackPower.appendTo(userStatusRow);
+  var userAttackPowerTitle = $("<h2>Attack Power:" + userCharacter.attackPower + "</h2>");
+  userAttackPowerTitle.appendTo(userAttackPower);
 }
+// function displayUserStatus(){
+//   $("#userStatus").append("<div class='col-md-3' id='userStatusTitle'></div>");
+//   $("#userStatus #userStatusTitle").append("<h2>User Status:</h2>");
+
+//   $("#userStatus").append("<div class='col-md-3' id='userHealth'></div>");
+//   $("#userStatus #userHealth").append("<h2>User Health: "+userCharacter.health+"</h2>");
+
+//   $("#userStatus").append("<div class='col-md-3' id='userAttack'></div>");
+//   $("#userStatus #userAttack").append("<h2>User Attack: "+userCharacter.attackPower+"</h2>");
+// }
 
 function displayEnemyStatus(){
   $("#enemyStatus").append("<div class='col-md-3' id='enemyStatusTitle'></div>");
