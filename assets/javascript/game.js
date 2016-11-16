@@ -36,19 +36,29 @@ $(document).ready(function () {
 
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
 function displayCharacters(){
-  var selectCharacter = $("#selectCharacter");
+  var userColumn = $("#userColumn");
+  var userRow = $("<div></div>").addClass("row");
+  userRow.attr("id", "userRow");
+  userRow.appendTo(userColumn);
+  
+  var selectCharacter = $("<div></div>").addClass("col-md-12");
+  selectCharacter.attr("id", "selectCharacter");
+  selectCharacter.appendTo(userRow);
   for (i = 0; i < charArray.length; i++){
     var newRowDiv = $("<div></div>").addClass("row");
     newRowDiv.attr("id", "availableCharacterRow" + i);
     newRowDiv.appendTo(selectCharacter);
 
-    var newColDiv = $("<div></div>").addClass("col-md-6");
+    var newColDiv = $("<div></div>").addClass("col-md-12");
     newColDiv.attr("id","char" + i);
     newColDiv.appendTo(newRowDiv);
 
     var newImage = $("<img>");
     newImage.attr("src", charArray[i].image);
     newImage.appendTo(newColDiv);
+
+    var characterTitle = $("<h2>" + charArray[i].name + "</h2>");
+    characterTitle.appendTo(newColDiv);
   }
 }
 
@@ -83,7 +93,18 @@ function displayCharacters(){
 
 function displayUserCharacter(){
   var selectCharacter = $("#selectCharacter");
-  $(selectCharacter).hide();
+  $(selectCharacter).remove();
+
+  var userCharacterDiv = $("<div></div>").addClass("col-md-12");
+  userCharacterDiv.attr("id", "userCharacter");
+  userCharacterDiv.appendTo(userRow);
+
+  var userCharacterImage = $("<img>");
+  userCharacterImage.attr("src", userCharacter.image);
+  userCharacterImage.appendTo(userCharacterDiv);
+
+  var userCharacterTitle = $("<h2>" + userCharacter.name + "</h2>");
+  userCharacterTitle.appendTo(userCharacterDiv);
 
 }
 
