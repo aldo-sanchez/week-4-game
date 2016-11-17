@@ -105,7 +105,7 @@ function displayStatus(character, charObject){
   }else{
     var charAttackTitle = $("<h2></h2>");
     charAttackTitle.attr("id", character+"AttackTitle");
-    charAttackTitle.text("Counter Attack Power: " + charObject.attackPower);
+    charAttackTitle.text("Counter Attack Power: " + charObject.counterAttack);
   };
 
   charAttackTitle.appendTo(charAttack); 
@@ -231,20 +231,22 @@ function healthBarAnimation(character, charObject){
 
 
 function attackLogic(){
-  console.log("user attack power: " + userCharacter.attackPower);
-  console.log("enemy counter attack power: " + enemyCharacter.counterAttack);
-
   enemyCharacter.health -= userCharacter.attackPower;
-  healthBarAnimation("enemy", enemyCharacter);
-  userCharacter.health -= enemyCharacter.counterAttack;
-  healthBarAnimation("user", userCharacter);
 
+  if(player.isAttacking){
+    healthBarAnimation("enemy", enemyCharacter);
+    checkHealth();
+  }
   
 
-  userAttackUpdate();
-  console.log("user health: " + userCharacter.health);
-  console.log("enemy health: " + enemyCharacter.health);
+  userCharacter.health -= enemyCharacter.counterAttack;
+  
+  if(player.isAttacking){
+  healthBarAnimation("user", userCharacter);
   checkHealth();
+  }
+  
+  userAttackUpdate();
   }
 
 function checkHealth(){
@@ -254,11 +256,13 @@ function checkHealth(){
   }
   else if (enemyCharacter.health <= 0){
     console.log("you win");
-
-    $("div").remove("#enemyCharacter");
-    $("div").remove("#enemyCharacterTitle");
     player.isAttacking = !player.isAttacking;
+    restart();
   }
 }
 
+function restart(){
+  $("#enemyRow").remove();
+  displayCharacters("enemy",enemyArray);
+}
 // update attack logic to first check health after one attack then after counter attack, then attack then counter... instead of after both

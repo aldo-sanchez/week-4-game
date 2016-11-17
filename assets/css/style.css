@@ -15,7 +15,14 @@ h2{
   padding: 0 0 10px 0;
 }
 
-.healthBarWarning{
-  background-color: yellow;
-  box-shadow: slategrey;
+/*.btn-primary{
+  font-size: 25px;
+  background: none;
+  border: 2px solid #FFE81F;
+  color: #FFE81F;
 }
+
+  .btn-primary:hover, .open>.dropdown-toggle.btn-primary{
+    background-color: #FFE81F;
+    color: black;
+  }*/
