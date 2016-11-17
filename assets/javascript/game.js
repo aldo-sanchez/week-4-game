@@ -99,9 +99,13 @@ function displayStatus(character, charObject){
     charAttack.appendTo(statusRow);
 
   if (character == "user"){
-    var charAttackTitle = $("<h2>Attack Power:" + charObject.attackPower + "</h2>");
+    var charAttackTitle = $("<h2></h2>");
+    charAttackTitle.attr("id", character+"AttackTitle");
+    charAttackTitle.text("Attack Power: " + charObject.attackPower);
   }else{
-    var charAttackTitle = $("<h2>Counter Attack Power:" + charObject.counterAttack + "</h2>");
+    var charAttackTitle = $("<h2></h2>");
+    charAttackTitle.attr("id", character+"AttackTitle");
+    charAttackTitle.text("Counter Attack Power: " + charObject.attackPower);
   };
 
   charAttackTitle.appendTo(charAttack); 
@@ -111,6 +115,7 @@ function displayStatus(character, charObject){
   charHealth.appendTo(statusRow);
   var healthBar = $("<div></div>").addClass("progress-bar");
   healthBar.attr({
+    id: character + "HealthBar",
     role: "progress-bar",
     ariavaluenow: charObject.health,
     ariavaluemin: "0",
@@ -128,7 +133,7 @@ for (let i = 0; i < charArray.length; i++){
     if (!player.isInitialized && !player.isAttacking){
     console.log("i selected character");
     userSelection(i);
-    player.isInitialized = !player.isInitialized;
+    
     }
   });
 };
@@ -147,6 +152,7 @@ for (let i = 0; i < charArray.length; i++){
 
 function userSelection(i){
   userCharacter = charArray[i];
+  player.isInitialized = !player.isInitialized;
   userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
   
@@ -159,11 +165,8 @@ function userSelection(i){
   }
   console.log("original enemy array "+enemyArray[0].name,enemyArray[1].name,enemyArray[2].name);
   displaySingleCharacter("user", userCharacter);
-  // displayUserCharacter();
-  // displayEnemies();
+    displayStatus("user", userCharacter);
   displayCharacters("enemy", enemyArray);
-  // displayUserStatus();
-  displayStatus("user", userCharacter)
 }
 
 function enemySelection(i){
@@ -198,27 +201,47 @@ $("#attackButton").click(function(){
     if(enemyCharacter.health >= 0){
       console.log("im attacking");
       attackLogic();
-        
-      $("div").remove("#userStatusTitle");
-      $("div").remove("#userHealth");
-      $("div").remove("#userAttack");
-
-      $("div").remove("#enemyStatusTitle");
-      $("div").remove("#enemyHealth");
-      $("div").remove("#enemyCounterAttack");
-
-      displayUserStatus();
-      displayEnemyStatus();
+      // characterStatusUpdate();
     }
   };
 });
 
+function userAttackUpdate(){
+  userCharacter.attackPower += userCharacter.attackBase;
+  $("#userAttackTitle").text("Attack Power: " + userCharacter.attackPower);
+}
+
+function healthBarAnimation(character, charObject){
+  var healthBar = $("#" + character + "HealthBar");
+
+  healthBar.css("width", (charObject.health/charObject.staticHealth)*100 + "%");
+  healthBar.text(charObject.health);
+
+  if (charObject.health < 100){
+    healthBar.addClass("progress-bar-warning");
+  }
+  if (charObject.health < 50){
+    healthBar.removeClass("progress-bar-warning");
+    healthBar.addClass("progress-bar-danger");
+  }
+  if (charObject.health <=10){
+    healthBar.addClass("progress-bar-striped active")
+  }
+}
+
+
 function attackLogic(){
   console.log("user attack power: " + userCharacter.attackPower);
   console.log("enemy counter attack power: " + enemyCharacter.counterAttack);
+
   enemyCharacter.health -= userCharacter.attackPower;
+  healthBarAnimation("enemy", enemyCharacter);
   userCharacter.health -= enemyCharacter.counterAttack;
-  userCharacter.attackPower += userCharacter.attackBase;
+  healthBarAnimation("user", userCharacter);
+
+  
+
+  userAttackUpdate();
   console.log("user health: " + userCharacter.health);
   console.log("enemy health: " + enemyCharacter.health);
   checkHealth();
