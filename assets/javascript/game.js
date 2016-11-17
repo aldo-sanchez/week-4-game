@@ -9,12 +9,13 @@ var userCharacter;
 
 // define a character constructor:
 // name: name of character, isUser:bool defining if this character was selected by user, isOption:  bool defining if character is available as an option for selection (user or enemy), health: character total health, attackBase: base of attack for character that adds to attackPower after every move, attackPower: character power that is used if userCharacter, counterAttack: character power that is used if enemyCharacter
-function character(name, image, isUser, isOption, isEnemy, health, attackBase,attackPower, counterAttack){
+function character(name, image, isUser, isOption, isEnemy, staticHealth, health, attackBase,attackPower, counterAttack){
   this.name = name;
   this.image = image;
   this.isUser = isUser;
   this.isOption = isOption;
   this.isEnemy = isEnemy;
+  this.staticHealth = staticHealth;
   this.health = health;
   this.attackBase = attackBase;
   this.attackPower = attackPower;
@@ -22,10 +23,10 @@ function character(name, image, isUser, isOption, isEnemy, health, attackBase,at
 };
 
 // define all characters based on character constructor:
-var darthVader = new character("Darth Vader", "assets/images/darth-vader.svg", false, true, false, 200, 30, 30, 45);
-var bobaFett = new character("Boba Fett", "assets/images/boba-fett.svg", false, true, false, 100, 35, 35, 30);
-var leia = new character("Leia", "assets/images/princess-leia.svg", false, true, false, 150, 30, 30, 50);
-var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg", false, true, false, 250, 25, 25, 30);
+var darthVader = new character("Darth Vader", "assets/images/darth-vader.svg", false, true, false, 200, 200, 30, 30, 45);
+var bobaFett = new character("Boba Fett", "assets/images/boba-fett.svg", false, true, false, 100, 100, 35, 35, 30);
+var leia = new character("Leia", "assets/images/princess-leia.svg", false, true, false, 150, 150, 30, 30, 50);
+var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg", false, true, false, 250, 250, 25, 25, 30);
 
 //collect all character object in a character array so that we can dynamically call a character
 charArray = [darthVader, bobaFett, leia, chewbacca];
@@ -93,13 +94,7 @@ function displayStatus(character, charObject){
   statusRow.attr("id", character + "StatusRow");
   statusRow.appendTo(statusCol);
 
-  var charHealth = $("<div></div>").addClass("col-md-12");
-  charHealth.attr("id", character + "Health");
-  charHealth.appendTo(statusRow);
-  var charHealthTitle = $("<h2>Health:" + charObject.health + "</h2>");
-  charHealthTitle.appendTo(charHealth);
-
-    var charAttack = $("<div></div>").addClass("col-md-12");
+  var charAttack = $("<div></div>").addClass("col-md-12");
     charAttack.attr("id", character + "Attack");
     charAttack.appendTo(statusRow);
 
@@ -111,6 +106,19 @@ function displayStatus(character, charObject){
 
   charAttackTitle.appendTo(charAttack); 
   
+  var charHealth = $("<div></div>").addClass("col-md-12");
+  charHealth.attr("id", character + "Health");
+  charHealth.appendTo(statusRow);
+  var healthBar = $("<div></div>").addClass("progress-bar");
+  healthBar.attr({
+    role: "progress-bar",
+    ariavaluenow: charObject.health,
+    ariavaluemin: "0",
+    ariavaluemax: charObject.staticHealth, 
+    });
+    healthBar.css("width", (charObject.health/charObject.staticHealth)*100 + "%");
+    healthBar.text(charObject.health);
+    healthBar.appendTo(charHealth);   
 }
 
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
