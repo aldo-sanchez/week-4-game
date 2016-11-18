@@ -232,20 +232,14 @@ function healthBarAnimation(character, charObject){
 
 function attackLogic(){
   enemyCharacter.health -= userCharacter.attackPower;
+  healthBarAnimation("enemy", enemyCharacter);
 
-  if(player.isAttacking){
-    healthBarAnimation("enemy", enemyCharacter);
-    checkHealth();
+  if (enemyCharacter.health > 0){
+    userCharacter.health -= enemyCharacter.counterAttack;
+    healthBarAnimation("user", userCharacter);
   }
   
-
-  userCharacter.health -= enemyCharacter.counterAttack;
-  
-  if(player.isAttacking){
-  healthBarAnimation("user", userCharacter);
   checkHealth();
-  }
-  
   userAttackUpdate();
   }
 
