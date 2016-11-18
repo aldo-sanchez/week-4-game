@@ -5,7 +5,6 @@ var player = {isInitialized:false, isAttacking:false, isGameOver:true, wins:0, l
 var enemyArray = [];
 var enemyCharacter;
 var userCharacter;
-// var selectedEnemy;
 
 // define a character constructor:
 // name: name of character, isUser:bool defining if this character was selected by user, isOption:  bool defining if character is available as an option for selection (user or enemy), health: character total health, attackBase: base of attack for character that adds to attackPower after every move, attackPower: character power that is used if userCharacter, counterAttack: character power that is used if enemyCharacter
@@ -39,6 +38,7 @@ function initialization(){
   $("#attackRow").hide();
   $("#userRow").remove();
   $("#enemyRow").remove();
+  $(".lead").text("select character to begin")
   player.isInitialized = !player.isInitialized;
   player.isGameOver = !player.isGameOver;
 }
@@ -68,7 +68,7 @@ function createArray(){
 function displayCharacters(character, array){
 
   if (character == "enemy"){
-    $(".lead").text("select an enemy to fight!");
+    $(".lead").text("select an enemy to fight");
   }
 
   var column = $("#" + character + "Column");
@@ -154,6 +154,7 @@ function displayStatus(character, charObject){
     ariavaluemin: "0",
     ariavaluemax: charObject.staticHealth, 
     });
+
     healthBar.css("width", (charObject.health/charObject.staticHealth)*100 + "%");
     healthBar.text(charObject.health);
     healthBar.appendTo(charHealth);   
@@ -161,19 +162,17 @@ function displayStatus(character, charObject){
 
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
 $(document).on("click",".user",function selectCharacter(){
-    if (player.isInitialized && !player.isAttacking){
+    if (player.isInitialized && !player.isAttacking && !player.isGameOver){
       var selectedUser = $(this).attr("id");
       selectedUser = parseInt(selectedUser.charAt(4));
       var charArray = createArray();
       userSelection(selectedUser, charArray);
-       console.log("charArray index: "+ selectedUser);
-      // enemySelection(selectedEnemy);
     }
   });
 
 //click event for enemies after enemies are displayed and populated from userSelection().  for some reason I cannot use the for loop if i call displayEnemies(), from inside a function... However this works great!  
   $(document).on("click",".enemy",function selectEnemy(){
-    if (player.isInitialized && !player.isAttacking){
+    if (player.isInitialized && !player.isAttacking && !player.isGameOver){
       var selectedEnemy = $(this).attr("id");
       selectedEnemy = parseInt(selectedEnemy.charAt(5));
       console.log("enemyArray index: "+ selectedEnemy);
@@ -208,7 +207,6 @@ function enemySelection(i){
   enemyCharacter.isOption = !enemyCharacter.isOption;
   
   enemyArray.splice(i,1);
-  console.log(enemyArray);
   $("div").remove(".enemy");
   $("div").remove("#enemyTitle");
 
@@ -220,6 +218,7 @@ function enemySelection(i){
   // displayEnemies();
   // displayEnemyStatus();
   displayStatus("enemy", enemyCharacter);
+  $(".lead").text("attack!");
   $("#attackRow").show();
 }
 
@@ -233,19 +232,14 @@ function enemySelection(i){
 $("#attackButton").click(function(){
   if(player.isAttacking){
     if(enemyCharacter.health >= 0){
-      console.log("im attacking");
       attackLogic();
-      // characterStatusUpdate();
     }
   };
 });
 
 $("#resetButton").click(function(){
   if(player.isGameOver){
-    
-      console.log("im resetting");
       reset();
-      // characterStatusUpdate();
     }
 });
 
@@ -257,8 +251,13 @@ function userAttackUpdate(){
 function healthBarAnimation(character, charObject){
   var healthBar = $("#" + character + "HealthBar");
 
-  healthBar.css("width", (charObject.health/charObject.staticHealth)*100 + "%");
+// if (charObject.health < 0){
+//   charObject = 0;
+// }
+healthBar.css("width", (charObject.health/charObject.staticHealth)*100 + "%");
+if (charObject.health >= 0){
   healthBar.text(charObject.health);
+}else{healthBar.text(0)};
 
   if (charObject.health < 100){
     healthBar.addClass("progress-bar-warning");
@@ -288,25 +287,28 @@ function attackLogic(){
 
 function checkHealth(){
   if (userCharacter.health <= 0){
-    console.log("you lose");
+    userCharacter.health = 0;
     player.isAttacking = !player.isAttacking;
     player.isGameOver = !player.isGameOver;
     player.losses++;
+    $("#losses").text("losses: " + player.losses);
     $("#attackRow").hide();
-    $("resetRow").show();
-    restart();
+    $("#resetRow").show();
+    $(".lead").text("you lose!");
+    // restart();
   }
   else if (enemyCharacter.health <= 0){
-    console.log("you win");
     player.isAttacking = !player.isAttacking;
     if (enemyArray.length == 0){
       player.isGameOver = !player.isGameOver;
       player.wins++;
       $("#resetRow").show();
+      $("#wins").text("wins: " + player.wins);
+      $(".lead").text("you win!");
+    }else if(enemyArray.length > 0){
+      restart();
     }
-    $("#wins").text("Wins: " + player.wins);
     $("#attackRow").hide();
-    restart();
   }
 }
 
