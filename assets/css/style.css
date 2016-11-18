@@ -1,7 +1,7 @@
 body{
   background-image: url("../images/stardust.png");
-  font-family: "Source Sans pro", sans-serif;
-  /*font-family: "Titillium Web", sans-serif;*/
+  /*font-family: "Source Sans pro", sans-serif;*/
+  font-family: "Titillium Web", sans-serif;
   /*font-family: "Lato", sans-serif;*/
 }
 
@@ -13,29 +13,47 @@ h2{
   color: lightgrey;
 }
 
+h1{
+  color: lightgrey;
+  font-size: 40px;
+}
+
 .jumbotron{
   background-color: #FFE81F;
   color: black;
+  margin-bottom: 3px;
   /*padding: 2px 2px 2px 5px;*/
 }
 
+.player{
+  line-height: 55px;
+  margin-top: 0;
+}
+
+#userPlayer{
+  border-bottom: 2px solid lawngreen;
+}
+
+#enemyPlayer{
+  border-bottom: 2px solid red;
+}
 
 #gameRow{
   text-align: center;
   padding: 0 0 10px 0;
 }
 
-#attackButton{
-  width: 90%;
-  margin-left: 5%;
+button{
+  width: 100%;
   background: none;
   height: 35px;
   border-radius: 5px;
+  font-size: 20px;
+}
+
+#attackButton{
   border: 2px solid #FFE81F;
   color: #FFE81F;
-
-  font-size: 20px;
-
 }
 
 #attackButton:hover{
@@ -44,20 +62,13 @@ h2{
 }
 
 #resetButton{
-  width: 90%;
-  margin-left: 5%;
-  background: none;
-  height: 35px;
-  border-radius: 5px;
-  border: 2px solid #0aa819;
-  color: #0aa819;
-
-  font-size: 20px;
-
+  margin-top: 10px;
+  border: 2px solid deepskyblue;
+  color: deepskyblue;
 }
 
 #resetButton:hover{
   color: black;
-  background-color: #0aa819;
+  background-color: deepskyblue;
 }
 

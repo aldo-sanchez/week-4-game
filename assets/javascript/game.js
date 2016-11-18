@@ -109,6 +109,11 @@ function displaySingleCharacter(character, charObject){
   characterDiv.attr("id", character + "Character");
   characterDiv.appendTo(row);
 
+  var characterUser = $("<h1></h1>").addClass("player");
+  characterUser.attr("id", character + "Player");
+  characterUser.text(character);
+  characterUser.appendTo(characterDiv);
+
   var characterImage = $("<img>");
   characterImage.attr("src", charObject.image);
   characterImage.appendTo(characterDiv);
