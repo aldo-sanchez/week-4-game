@@ -1,5 +1,8 @@
 body{
   background-image: url("../images/stardust.png");
+  font-family: "Source Sans pro", sans-serif;
+  /*font-family: "Titillium Web", sans-serif;*/
+  /*font-family: "Lato", sans-serif;*/
 }
 
 img{
@@ -10,19 +13,51 @@ h2{
   color: lightgrey;
 }
 
+.jumbotron{
+  background-color: #FFE81F;
+  color: black;
+  /*padding: 2px 2px 2px 5px;*/
+}
+
+
 #gameRow{
   text-align: center;
   padding: 0 0 10px 0;
 }
 
-/*.btn-primary{
-  font-size: 25px;
+#attackButton{
+  width: 90%;
+  margin-left: 5%;
   background: none;
+  height: 35px;
+  border-radius: 5px;
   border: 2px solid #FFE81F;
   color: #FFE81F;
+
+  font-size: 20px;
+
 }
 
-  .btn-primary:hover, .open>.dropdown-toggle.btn-primary{
-    background-color: #FFE81F;
-    color: black;
-  }*/
+#attackButton:hover{
+  color: black;
+  background-color: #FFE81F;
+}
+
+#resetButton{
+  width: 90%;
+  margin-left: 5%;
+  background: none;
+  height: 35px;
+  border-radius: 5px;
+  border: 2px solid #0aa819;
+  color: #0aa819;
+
+  font-size: 20px;
+
+}
+
+#resetButton:hover{
+  color: black;
+  background-color: #0aa819;
+}
+

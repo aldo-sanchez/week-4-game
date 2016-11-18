@@ -1,7 +1,7 @@
 console.log("star wars!!!")
 
 //define player object:
-var player = {isInitialized:false, isAttacking:false, wins:0, losses:0};
+var player = {isInitialized:false, isAttacking:false, isGameOver:true, wins:0, losses:0};
 var enemyArray = [];
 var enemyCharacter;
 var userCharacter;
@@ -23,21 +23,54 @@ function character(name, image, isUser, isOption, isEnemy, staticHealth, health,
 };
 
 // define all characters based on character constructor:
-var darthVader = new character("Darth Vader", "assets/images/darth-vader.svg", false, true, false, 200, 200, 30, 30, 45);
-var bobaFett = new character("Boba Fett", "assets/images/boba-fett.svg", false, true, false, 100, 100, 35, 35, 30);
-var leia = new character("Leia", "assets/images/princess-leia.svg", false, true, false, 150, 150, 30, 30, 50);
-var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg", false, true, false, 250, 250, 25, 25, 30);
 
 //collect all character object in a character array so that we can dynamically call a character
-charArray = [darthVader, bobaFett, leia, chewbacca];
+// charStaticArray = [darthVader, bobaFett, leia, chewbacca];
+// charArray = [darthVader, bobaFett, leia, chewbacca];
 
 $(document).ready(function () {
+    initialization();
+    var charArray = createArray();
     displayCharacters("user", charArray);
 });
+
+function initialization(){
+  $("#resetRow").hide();
+  $("#attackRow").hide();
+  $("#userRow").remove();
+  $("#enemyRow").remove();
+  player.isInitialized = !player.isInitialized;
+  player.isGameOver = !player.isGameOver;
+}
+
+function reset(){
+  player.isInitialized = !player.isInitialized;
+  initialization();
+  var charArray = createArray();
+  displayCharacters("user", charArray);
+}
+
+function createArray(){
+  var darthVader = new character("Darth Vader", "assets/images/darth-vader.svg", false, true, false, 200, 200, 30, 30, 45);
+  var bobaFett = new character("Boba Fett", "assets/images/boba-fett.svg", false, true, false, 100, 100, 35, 35, 30);
+  var leia = new character("Leia", "assets/images/princess-leia.svg", false, true, false, 150, 150, 30, 30, 50);
+  var chewbacca = new character("Chewbacca", "assets/images/chewbacca.svg",false, true, false, 250, 250, 25, 25, 30);
+
+  return charArray = [darthVader, bobaFett, leia, chewbacca];
+}
+
+
+
+// var charStaticArray = initialization();
 
 // display available characters in id:"characters" and id:"char'i'" where i is 0 to charArray
 
 function displayCharacters(character, array){
+
+  if (character == "enemy"){
+    $(".lead").text("select an enemy to fight!");
+  }
+
   var column = $("#" + character + "Column");
   var row = $("<div></div>").addClass("row");
   row.attr("id", character + "Row");
@@ -127,16 +160,16 @@ function displayStatus(character, charObject){
 }
 
 //click event for all characters while isInitialized = false.  This is used for character selection (for now).  I use a for loop to find any of the characters in the array.
-for (let i = 0; i < charArray.length; i++){
-  $(document).on("click","#user"+i,function selectCharacter(){
-  // $("#char" + i).click(function selectCharacter(){
-    if (!player.isInitialized && !player.isAttacking){
-    console.log("i selected character");
-    userSelection(i);
-    
+$(document).on("click",".user",function selectCharacter(){
+    if (player.isInitialized && !player.isAttacking){
+      var selectedUser = $(this).attr("id");
+      selectedUser = parseInt(selectedUser.charAt(4));
+      var charArray = createArray();
+      userSelection(selectedUser, charArray);
+       console.log("charArray index: "+ selectedUser);
+      // enemySelection(selectedEnemy);
     }
   });
-};
 
 //click event for enemies after enemies are displayed and populated from userSelection().  for some reason I cannot use the for loop if i call displayEnemies(), from inside a function... However this works great!  
   $(document).on("click",".enemy",function selectEnemy(){
@@ -150,9 +183,9 @@ for (let i = 0; i < charArray.length; i++){
 
 // character selection function will turn isInitialized = true, then change the selected character's isUser = true and isOption = false.  for the rest of characters isEnemy = true. Then we populate an enemy array of objects from not selected characters.  This array will be used to select a random enemy for battle. 
 
-function userSelection(i){
+function userSelection(i, charArray){
   userCharacter = charArray[i];
-  player.isInitialized = !player.isInitialized;
+  // player.isInitialized = !player.isInitialized;
   userCharacter.isUser = !userCharacter.isUser;
   userCharacter.isOption = !userCharacter.isOption;
   
@@ -163,9 +196,9 @@ function userSelection(i){
   for (i = 0; i < enemyArray.length; i++){
     enemyArray[i].isEnemy = !enemyArray[i].isEnemy;
   }
-  console.log("original enemy array "+enemyArray[0].name,enemyArray[1].name,enemyArray[2].name);
+
   displaySingleCharacter("user", userCharacter);
-    displayStatus("user", userCharacter);
+  displayStatus("user", userCharacter);
   displayCharacters("enemy", enemyArray);
 }
 
@@ -187,6 +220,7 @@ function enemySelection(i){
   // displayEnemies();
   // displayEnemyStatus();
   displayStatus("enemy", enemyCharacter);
+  $("#attackRow").show();
 }
 
 //selects enemy from enemyArray sets it to enemyCharacter and removes from array.
@@ -204,6 +238,15 @@ $("#attackButton").click(function(){
       // characterStatusUpdate();
     }
   };
+});
+
+$("#resetButton").click(function(){
+  if(player.isGameOver){
+    
+      console.log("im resetting");
+      reset();
+      // characterStatusUpdate();
+    }
 });
 
 function userAttackUpdate(){
@@ -247,10 +290,22 @@ function checkHealth(){
   if (userCharacter.health <= 0){
     console.log("you lose");
     player.isAttacking = !player.isAttacking;
+    player.isGameOver = !player.isGameOver;
+    player.losses++;
+    $("#attackRow").hide();
+    $("resetRow").show();
+    restart();
   }
   else if (enemyCharacter.health <= 0){
     console.log("you win");
     player.isAttacking = !player.isAttacking;
+    if (enemyArray.length == 0){
+      player.isGameOver = !player.isGameOver;
+      player.wins++;
+      $("#resetRow").show();
+    }
+    $("#wins").text("Wins: " + player.wins);
+    $("#attackRow").hide();
     restart();
   }
 }
@@ -259,4 +314,3 @@ function restart(){
   $("#enemyRow").remove();
   displayCharacters("enemy",enemyArray);
 }
-// update attack logic to first check health after one attack then after counter attack, then attack then counter... instead of after both

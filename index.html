@@ -6,10 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100|Source+Sans+Pro:200|Titillium+Web:200" rel="stylesheet">
+
   </head>
   <body>
     <div class="container">
+
+
+      <div class="jumbotron jumbotron-fluid page">
+        <div class="container">
+          <h1 class="display-3">Star Wars Game</h1>
+          <p class="lead">Select a character to begin!</p>
+          <p id="wins">Wins: </p>
+          <p id="losses">Losses: </p>
+        </div>
+      </div>
 
       <div class="row" id="gameRow">
         <div class="col-md-6" id="userColumn">
@@ -18,13 +31,19 @@
         </div>
       </div>
      
-      <!--Attack Button-->
-      <div class="row">
-        <div class="col-md-12">
-          <button type="button" class="btn btn-primary btn-block" id="attackButton">Attack</button>
+      <div class="row" id="attackRow">
+        <div class="col-md-12" id="attackColumn">
+          <button type="button" id="attackButton">Attack</button>
+        </div>
+      </div>
+
+      <div class="row" id="resetRow">
+        <div class="col-md-12" id="resetColumn">
+          <button type="button" id="resetButton">Restart Game</button>
         </div>
       </div>
     </div>
+    
 
     <!--jquery-->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
